@@ -35,7 +35,7 @@ def train_model(policy, baseline, trajs, policy_optim, baseline_optim, gamma=0.9
 
 # Training loop for policy gradient
 def simulate_policy_pg(env, policy, baseline, num_epochs=20000, max_path_length=200, pg_batch_size=100, 
-                        gamma=0.99, baseline_train_batch_size=64, baseline_num_epochs=5, print_freq=10):
+                        gamma=0.99, baseline_train_batch_size=64, baseline_num_epochs=5, print_freq=10, render=False):
     policy_optim = optim.Adam(policy.parameters())
     baseline_optim = optim.Adam(baseline.parameters())
 
@@ -44,7 +44,7 @@ def simulate_policy_pg(env, policy, baseline, num_epochs=20000, max_path_length=
 
         # Sampling trajectories
         for it in range(pg_batch_size):
-            sample_traj = rollout(env=env, agent=policy, episode_length=max_path_length, agent_name='pg', render=False)
+            sample_traj = rollout(env=env, agent=policy, episode_length=max_path_length, agent_name='pg', render=render)
             sample_trajs.append(sample_traj)
         
         # Logging returns occasionally

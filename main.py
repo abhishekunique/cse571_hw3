@@ -15,10 +15,6 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--task', type=str, default='policy_gradient', help='choose task')
-    parser.add_argument('--gpu', action='store_true', default=False)
-    parser.add_argument('--H', type=int, default=50, help='Max length of rollout')
-    parser.add_argument('--N', type=int, default=30, help='number of path')
-    parser.add_argument('--render', type=int, default=10, help='Render')
     args = parser.parse_args()
 
     if args.task == 'policy_gradient':
@@ -36,7 +32,7 @@ if __name__ == '__main__':
         baseline.to(device)
 
         # Training hyperparameters
-        num_epochs=20000
+        num_epochs=100
         max_path_length=200
         pg_batch_size=100
         gamma=0.99
@@ -46,7 +42,7 @@ if __name__ == '__main__':
 
         # Train policy gradient
         simulate_policy_pg(env, policy, baseline, num_epochs=num_epochs, max_path_length=max_path_length, pg_batch_size=pg_batch_size, 
-                        gamma=gamma, baseline_train_batch_size=baseline_train_batch_size, baseline_num_epochs=baseline_num_epochs, print_freq=print_freq)
+                        gamma=gamma, baseline_train_batch_size=baseline_train_batch_size, baseline_num_epochs=baseline_num_epochs, print_freq=print_freq, render=False)
 
     if args.task == 'behavior_cloning':
         # Define environment
