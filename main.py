@@ -1,16 +1,12 @@
 import gym
 import numpy as np
-import reach_goal
 import time
 import matplotlib.pyplot as plt
 import torch
 import argparse
-
 from utils import BCPolicy, generate_paths, get_expert_data, RLPolicy, RLBaseline
-from policy import MakeDeterministic
 from bc import simulate_policy_bc
 from dagger import simulate_policy_dagger
-from reach_goal.envs.reacher_env_mujoco import ReacherEnv
 from policy_gradient import simulate_policy_pg
 import pytorch_utils as ptu
 
@@ -42,7 +38,7 @@ if __name__ == '__main__':
         # Training hyperparameters
         num_epochs=20000
         max_path_length=200
-        pg_batch_size=100, 
+        pg_batch_size=100
         gamma=0.99
         baseline_train_batch_size=64
         baseline_num_epochs=5

@@ -11,7 +11,6 @@ from utils import get_action, log_density, rollout, combine_sample_trajs
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 def train_model(policy, baseline, trajs, policy_optim, baseline_optim, gamma=0.99, baseline_train_batch_size=64, baseline_num_epochs=5):
-   
     # Fill in your policy gradient implementation here
 
     # TODO: Compute the returns on the current batch of trajectories
@@ -32,6 +31,7 @@ def train_model(policy, baseline, trajs, policy_optim, baseline_optim, gamma=0.9
     # Hint: You can predict what the baseline outputs for every state.  
     # Hint: Then simply compute the surrogate objective by taking the objective as -log prob * (return - baseline)
     # Hint: You can then use standard pytorch machinery to take *one* gradient step on the policy
+    pass
 
 # Training loop for policy gradient
 def simulate_policy_pg(env, policy, baseline, num_epochs=20000, max_path_length=200, pg_batch_size=100, 
@@ -54,5 +54,5 @@ def simulate_policy_pg(env, policy, baseline, num_epochs=20000, max_path_length=
             print("Episode: {}, reward: {}, max path length: {}".format(iter_num, rewards_np, path_length))
 
         # Training model
-        train_model(policy, vf, sample_trajs, policy_optim, vf_optim, gamma=gamma, 
+        train_model(policy, baseline, sample_trajs, policy_optim, baseline_optim, gamma=gamma, 
                     baseline_train_batch_size=baseline_train_batch_size, baseline_num_epochs=baseline_num_epochs)
