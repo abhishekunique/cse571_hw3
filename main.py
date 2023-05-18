@@ -4,17 +4,22 @@ import time
 import matplotlib.pyplot as plt
 import torch
 import argparse
+
 from utils import BCPolicy, generate_paths, get_expert_data, RLPolicy, RLBaseline
+from policy import MakeDeterministic
 from bc import simulate_policy_bc
 from dagger import simulate_policy_dagger
 from policy_gradient import simulate_policy_pg
 import pytorch_utils as ptu
+from evaluate import evaluate
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--task', type=str, default='policy_gradient', help='choose task')
+    parser.add_argument('--test', action='store_true', default=False)
+    parser.add_argument('--render',  action='store_true', default=False)
     args = parser.parse_args()
 
     if args.task == 'policy_gradient':
@@ -40,9 +45,14 @@ if __name__ == '__main__':
         baseline_num_epochs=5
         print_freq=10
 
-        # Train policy gradient
-        simulate_policy_pg(env, policy, baseline, num_epochs=num_epochs, max_path_length=max_path_length, pg_batch_size=pg_batch_size, 
-                        gamma=gamma, baseline_train_batch_size=baseline_train_batch_size, baseline_num_epochs=baseline_num_epochs, print_freq=print_freq, render=False)
+        if not args.test:
+            # Train policy gradient
+            simulate_policy_pg(env, policy, baseline, num_epochs=num_epochs, max_path_length=max_path_length, pg_batch_size=pg_batch_size, 
+                            gamma=gamma, baseline_train_batch_size=baseline_train_batch_size, baseline_num_epochs=baseline_num_epochs, print_freq=print_freq, render=False)
+            torch.save(policy.state_dict(), 'pg_final.pth')
+        else:
+            policy.load_state_dict(torch.load(f'pg_final.pth'))
+        evaluate(env, policy, 'pg', num_validation_runs=10, episode_length=max_path_length, render=args.render)
 
     if args.task == 'behavior_cloning':
         # Define environment
@@ -66,9 +76,14 @@ if __name__ == '__main__':
         num_epochs = 200
         batch_size = 32
 
+        if not args.test:
         # Train behavior cloning
-        simulate_policy_bc(env, policy, expert_data, num_epochs=num_epochs, episode_length=episode_length,
+            simulate_policy_bc(env, policy, expert_data, num_epochs=num_epochs, episode_length=episode_length,
                             batch_size=batch_size, num_test_rollouts=num_test_rollouts, render=False)
+            torch.save(policy.state_dict(), 'bc_final.pth')
+        else:
+            policy.load_state_dict(torch.load(f'bc_final.pth'))
+        evaluate(env, policy, 'bc', num_validation_runs=10, episode_length=episode_length, render=args.render)
 
     if args.task == 'dagger':
         # Define environment
@@ -99,9 +114,13 @@ if __name__ == '__main__':
         batch_size = 32
         num_dagger_iters=10
         num_trajs_per_dagger=10
-        num_test_rollouts = 10
 
+        if not args.test:
         # Train DAgger
-        simulate_policy_dagger(env, policy, expert_data, expert_policy, num_epochs=num_epochs, episode_length=episode_length,
+            simulate_policy_dagger(env, policy, expert_data, expert_policy, num_epochs=num_epochs, episode_length=episode_length,
                                batch_size=batch_size, num_dagger_iters=num_dagger_iters, num_trajs_per_dagger=num_trajs_per_dagger, 
                                num_test_rollouts=num_test_rollouts, render=False)
+            torch.save(policy.state_dict(), 'dagger_final.pth')
+        else:
+            policy.load_state_dict(torch.load(f'dagger_final.pth'))
+        evaluate(env, policy, 'dagger', num_validation_runs=10, episode_length=episode_length, render=args.render)

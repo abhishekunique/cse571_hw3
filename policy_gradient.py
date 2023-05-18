@@ -1,9 +1,6 @@
-import gym
 import torch
 import numpy as np
 import torch.optim as optim
-from collections import deque
-import math
 import torch.nn as nn
 import torch.nn.functional as F
 from utils import get_action, log_density, rollout, combine_sample_trajs

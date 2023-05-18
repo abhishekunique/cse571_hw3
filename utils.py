@@ -98,9 +98,11 @@ def rollout(
 
         if agent_name == 'bc' or agent_name == 'dagger':
             action, agent_info = agent.get_action(o_for_agent)
-        else:
+        elif agent_name.lower() == 'pg':
             mu, std, _ = agent(torch.Tensor(o_for_agent).unsqueeze(0).to(device))
             action = get_action(mu, std)[0]
+        else:
+            raise KeyError("Invalid agent name")
 
         # Step the simulation forward
         next_o, r, done, env_info = env.step(copy.deepcopy(action))

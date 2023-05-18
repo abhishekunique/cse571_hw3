@@ -21,6 +21,7 @@ To set up the project environment, Use the `environment.yml` file. It contains t
 
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib/nvidia
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/enigma/.mujoco/mujoco210/bin
+    export LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libGLEW.so
     
 ## Running the assignment
 
