@@ -52,7 +52,7 @@ if __name__ == '__main__':
             torch.save(policy.state_dict(), 'pg_final.pth')
         else:
             policy.load_state_dict(torch.load(f'pg_final.pth'))
-        evaluate(env, policy, 'pg', num_validation_runs=10, episode_length=max_path_length, render=args.render)
+        evaluate(env, policy, 'pg', num_validation_runs=100, episode_length=max_path_length, render=args.render)
 
     if args.task == 'behavior_cloning':
         # Define environment
@@ -83,7 +83,7 @@ if __name__ == '__main__':
             torch.save(policy.state_dict(), 'bc_final.pth')
         else:
             policy.load_state_dict(torch.load(f'bc_final.pth'))
-        evaluate(env, policy, 'bc', num_validation_runs=10, episode_length=episode_length, render=args.render)
+        evaluate(env, policy, 'bc', num_validation_runs=100, episode_length=episode_length, render=args.render)
 
     if args.task == 'dagger':
         # Define environment
@@ -102,13 +102,12 @@ if __name__ == '__main__':
         expert_data = get_expert_data(file_path)
 
         # Load interactive expert
-        expert_policy = torch.load('data/expert_policy.pkl')
+        expert_policy = torch.load('data/expert_policy.pkl', map_location=torch.device(device))
         print("Expert policy loaded")
         expert_policy.to(device)
         ptu.set_gpu_mode(True)
 
         # Training hyperparameters
-        num_test_rollouts = 10
         episode_length = 50
         num_epochs = 400
         batch_size = 32
@@ -123,4 +122,4 @@ if __name__ == '__main__':
             torch.save(policy.state_dict(), 'dagger_final.pth')
         else:
             policy.load_state_dict(torch.load(f'dagger_final.pth'))
-        evaluate(env, policy, 'dagger', num_validation_runs=10, episode_length=episode_length, render=args.render)
+        evaluate(env, policy, 'dagger', num_validation_runs=100, episode_length=episode_length, render=args.render)
