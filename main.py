@@ -14,6 +14,12 @@ import pytorch_utils as ptu
 from evaluate import evaluate
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+print('using device', device)
+
+torch.manual_seed(0)
+import random
+random.seed(0)
+np.random.seed(0)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
