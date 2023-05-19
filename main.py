@@ -84,7 +84,7 @@ if __name__ == '__main__':
         if not args.test:
         # Train behavior cloning
             simulate_policy_bc(env, policy, expert_data, num_epochs=num_epochs, episode_length=episode_length,
-                            batch_size=batch_size, render=False)
+                            batch_size=batch_size)
             torch.save(policy.state_dict(), 'bc_final.pth')
         else:
             policy.load_state_dict(torch.load(f'bc_final.pth'))
@@ -122,7 +122,7 @@ if __name__ == '__main__':
         if not args.test:
         # Train DAgger
             simulate_policy_dagger(env, policy, expert_data, expert_policy, num_epochs=num_epochs, episode_length=episode_length,
-                               batch_size=batch_size, num_dagger_iters=num_dagger_iters, num_trajs_per_dagger=num_trajs_per_dagger, render=False)
+                               batch_size=batch_size, num_dagger_iters=num_dagger_iters, num_trajs_per_dagger=num_trajs_per_dagger)
             torch.save(policy.state_dict(), 'dagger_final.pth')
         else:
             policy.load_state_dict(torch.load(f'dagger_final.pth'))
