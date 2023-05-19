@@ -90,8 +90,7 @@ def rollout(
 
     o = env.reset()
     if render:
-        image = env.render(mode='rgb_array')
-        images.append(image)
+        env.render()
 
     while path_length < episode_length:
         o_for_agent = o
@@ -109,8 +108,7 @@ def rollout(
         
         # Render the environment
         if render:
-            image = env.render(mode='rgb_array')
-            images.append(image)
+            env.render()
 
         raw_obs.append(o)
         raw_next_obs.append(next_o)
