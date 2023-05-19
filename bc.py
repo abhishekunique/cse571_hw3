@@ -5,7 +5,7 @@ from utils import rollout
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 def simulate_policy_bc(env, policy, expert_data, num_epochs=500, episode_length=50, 
-                       batch_size=32, num_test_rollouts=10, render=False):
+                       batch_size=32, render=False):
     
     # Hint: Just flatten your expert dataset and use standard pytorch supervised learning code to train the policy. 
     optimizer = optim.Adam(list(policy.parameters()))

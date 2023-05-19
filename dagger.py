@@ -7,7 +7,7 @@ from utils import rollout, relabel_action
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 def simulate_policy_dagger(env, policy, expert_paths, expert_policy=None, num_epochs=500, episode_length=50,
-                            batch_size=32, num_dagger_iters=10, num_trajs_per_dagger=10, num_test_rollouts=10, render=False):
+                            batch_size=32, num_dagger_iters=10, num_trajs_per_dagger=10, render=False):
     
     # TODO: Fill in your dagger implementation here. 
     
