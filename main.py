@@ -78,7 +78,7 @@ if __name__ == '__main__':
 
         # Training hyperparameters
         episode_length = 50
-        num_epochs = 200
+        num_epochs = 500
         batch_size = 32
 
         if not args.test:
