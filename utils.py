@@ -165,10 +165,9 @@ def get_expert_data(file_path):
     return expert_data
 
 def relabel_action(path, expert_policy):
-    for i in range(len(path)):
-        observation = path['observations']
-        expert_action = expert_policy.get_action(observation)
-        path['actions'] = expert_action[0]
+    observation = path['observations']
+    expert_action = expert_policy.get_action(observation)
+    path['actions'] = expert_action[0]
     return path
 
 def combine_sample_trajs(sample_trajs):
