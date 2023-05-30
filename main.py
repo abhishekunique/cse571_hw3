@@ -80,6 +80,7 @@ if __name__ == '__main__':
         episode_length = 50
         num_epochs = 500
         batch_size = 32
+        num_validation_runs = 100
 
         if not args.test:
         # Train behavior cloning
@@ -88,7 +89,7 @@ if __name__ == '__main__':
             torch.save(policy.state_dict(), 'bc_final.pth')
         else:
             policy.load_state_dict(torch.load(f'bc_final.pth'))
-        evaluate(env, policy, 'bc', num_validation_runs=100, episode_length=episode_length, render=args.render)
+        evaluate(env, policy, 'bc', num_validation_runs=num_validation_runs, episode_length=episode_length, render=args.render)
 
     if args.task == 'dagger':
         # Define environment
@@ -116,8 +117,9 @@ if __name__ == '__main__':
         episode_length = 50
         num_epochs = 400
         batch_size = 32
-        num_dagger_iters=10
-        num_trajs_per_dagger=10
+        num_dagger_iters = 10
+        num_trajs_per_dagger = 10
+        num_validation_runs = 100
 
         if not args.test:
         # Train DAgger
@@ -126,4 +128,4 @@ if __name__ == '__main__':
             torch.save(policy.state_dict(), 'dagger_final.pth')
         else:
             policy.load_state_dict(torch.load(f'dagger_final.pth'))
-        evaluate(env, policy, 'dagger', num_validation_runs=100, episode_length=episode_length, render=args.render)
+        evaluate(env, policy, 'dagger', num_validation_runs=num_validation_runs, episode_length=episode_length, render=args.render)
